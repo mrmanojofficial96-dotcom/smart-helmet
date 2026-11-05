@@ -1,1 +1,184 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Helmet Dashboard</title>
+
+  <style>
+    body {
+      background: #101827;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+      padding: 15px;
+    }
+
+    .box {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      background: #16a34a;
+      color: white;
+      font-size: 16px;
+    }
+
+    .red {
+      background: #dc2626;
+    }
+
+    .blue {
+      background: #2563eb;
+    }
+
+    a {
+      color: #60a5fa;
+      word-break: break-all;
+    }
+
+    #dashboard {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🪖 Smart Helmet</h1>
+  <p>Emergency Alert System</p>
+
+  <!-- LOGIN PAGE -->
+  <div class="box" id="loginPage">
+    <h2>User Login</h2>
+
+    <input type="tel" id="phone"
+           placeholder="Enter WhatsApp Number">
+
+    <button onclick="login()">Login</button>
+
+    <p id="loginMessage"></p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+
+    <h2>Welcome User</h2>
+    <p id="userNumber"></p>
+
+    <div class="box">
+      <h3>📡 GPS Status</h3>
+      <h2 id="gpsStatus">Waiting for GPS...</h2>
+
+      <p>Latitude</p>
+      <input type="number" id="latitude"
+             placeholder="Enter Latitude">
+
+      <p>Longitude</p>
+      <input type="number" id="longitude"
+             placeholder="Enter Longitude">
+
+      <button class="blue" onclick="updateLocation()">
+        Update Location
+      </button>
+
+      <p id="locationResult">
+        No GPS location available
+      </p>
+
+      <a id="mapLink" href="#" target="_blank"
+         style="display:none">
+        Open Google Maps
+      </a>
+    </div>
+
+    <div class="box">
+      <h3>🚨 Emergency Status</h3>
+      <h2 id="emergencyStatus">No Emergency</h2>
+
+      <button class="red" onclick="testEmergency()">
+        Test Emergency Alert
+      </button>
+    </div>
+
+    <button onclick="logout()">Logout</button>
+
+  </div>
+
+  <script>
+
+    function login() {
+      let phone = document.getElementById("phone").value;
+
+      if (!/^\d{10,15}$/.test(phone)) {
+        alert("Enter a valid phone number");
+        return;
+      }
+
+      document.getElementById("loginPage").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+
+      document.getElementById("userNumber").innerHTML =
+        "Registered Number: " + phone;
+    }
+
+    function updateLocation() {
+      let lat = parseFloat(
+        document.getElementById("latitude").value
+      );
+
+      let lon = parseFloat(
+        document.getElementById("longitude").value
+      );
+
+      if (!Number.isFinite(lat) ||
+          !Number.isFinite(lon) ||
+          lat < -90 || lat > 90 ||
+          lon < -180 || lon > 180) {
+
+        alert("Enter valid GPS coordinates");
+        return;
+      }
+
+      document.getElementById("gpsStatus").innerHTML =
+        "GPS Location Available";
+
+      document.getElementById("locationResult").innerHTML =
+        "Latitude: " + lat + "<br>Longitude: " + lon;
+
+      let link = "https://maps.google.com/?q=" + lat + "," + lon;
+
+      document.getElementById("mapLink").href = link;
+      document.getElementById("mapLink").style.display = "block";
+    }
+
+    function testEmergency() {
+      document.getElementById("emergencyStatus").innerHTML =
+        "🚨 Emergency Test Triggered!";
+    }
+
+    function logout() {
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("loginPage").style.display = "block";
+
+      document.getElementById("phone").value = "";
+      document.getElementById("loginMessage").innerHTML = "";
+    }
+
+  </script>
+
+</body>
+</html>
+
