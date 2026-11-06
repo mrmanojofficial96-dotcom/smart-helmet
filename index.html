@@ -60,19 +60,22 @@
   <h1>🪖 Smart Helmet</h1>
   <p>Emergency Alert System</p>
 
-  <!-- LOGIN PAGE -->
-  <div class="box" id="loginPage">
-    <h2>User Login</h2>
+ <!-- LOGIN PAGE -->
+<div class="box" id="loginPage">
+  <h2>Smart Helmet Login</h2>
 
-    <input type="tel" id="phone"
-           placeholder="Enter WhatsApp Number">
+  <input type="email" id="email"
+         placeholder="Enter Email Address">
 
-    <button onclick="login()">Login</button>
+  <input type="password" id="password"
+         placeholder="Enter Password">
 
-    <p id="loginMessage"></p>
-  </div>
+  <button onclick="login()">Login</button>
 
-  <!-- DASHBOARD -->
+  <p id="loginMessage"></p>
+</div>
+
+<!-- DASHBOARD -->
   <div id="dashboard">
 
     <h2>Welcome User</h2>
@@ -119,22 +122,25 @@
 
   <script>
 
-    function login() {
-      let phone = document.getElementById("phone").value;
+    async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
 
-      if (!/^\d{10,15}$/.test(phone)) {
-        alert("Enter a valid phone number");
-        return;
-      }
+  const { data, error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
+  if (error) {
+    document.getElementById("loginMessage").innerText =
+      "Login failed: " + error.message;
+    return;
+  }
 
-      document.getElementById("userNumber").innerHTML =
-        "Registered Number: " + phone;
-    }
-
-    function updateLocation() {
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+}
+    function updateLocation()
       let lat = parseFloat(
         document.getElementById("latitude").value
       );
@@ -177,7 +183,13 @@
       document.getElementById("loginMessage").innerHTML = "";
     }
 
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const supabaseClient = supabase.createClient(
+  "https://mrmanojofficial96-dotcom.github.io/smart-helmet/",
+  "sb_secret_C1xZN1TvVqZXCpAuvy733w_3btO-LvQ"
+);
+</script>
 
 </body>
 </html>
